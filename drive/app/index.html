@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ofesi</title>
+<style>
+:root{--bg:#f6f3ee;--panel:#fff;--ink:#1d1a16;--mute:#6b645a;--line:#e4ddd2;--accent:#b5562a;--accent-ink:#fff;--soft:#f3e6dc;--green:#1f6b4a}
+@media (prefers-color-scheme:dark){:root{--bg:#15130f;--panel:#1f1c17;--ink:#f1ece4;--mute:#a59d90;--line:#332e27;--accent:#d9733f;--accent-ink:#15130f;--soft:#2c231c;--green:#4fb385}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",system-ui,-apple-system,Roboto,sans-serif;height:100vh;display:flex}
+button{font:inherit;cursor:pointer}
+aside{width:270px;flex:none;border-right:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column}
+.brand{padding:18px 18px 10px;font-weight:700;font-size:20px;letter-spacing:.3px}
+.brand small{display:block;font-weight:400;font-size:12px;color:var(--mute)}
+.staff{flex:1;overflow:auto;padding:6px 10px}
+.member{display:flex;gap:10px;align-items:center;width:100%;text-align:left;background:none;border:0;border-radius:10px;padding:9px 10px;color:var(--ink)}
+.member:hover{background:var(--soft)}
+.member.on{background:var(--soft);box-shadow:inset 3px 0 0 var(--accent)}
+.av{width:36px;height:36px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;color:#fff}
+.member b{display:block;font-size:14px}.member span{font-size:12px;color:var(--mute)}
+.side-foot{padding:10px;border-top:1px solid var(--line)}
+.side-foot button{width:100%;background:none;border:1px solid var(--line);border-radius:8px;padding:7px;color:var(--ink);margin-top:6px;font-size:13px}
+.tag{margin-left:auto;font-style:normal;font-size:11px;border-radius:9px;padding:1px 7px;background:var(--accent);color:var(--accent-ink);white-space:nowrap}
+.tag.q{background:none;color:var(--mute);border:1px solid var(--line)}
+.opts{flex-basis:100%;display:flex;flex-wrap:wrap;gap:6px 16px;align-items:center;font-size:12px;color:var(--mute)}
+.opts select{font:inherit;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:6px}
+.src{font-size:12px;color:var(--mute);margin-top:4px}.src a{color:var(--accent)}
+.rep{display:flex;gap:10px;align-items:center;border-top:1px solid var(--line);padding:8px 0;font-size:13px}.rep span{flex:1}
+main{flex:1;display:flex;flex-direction:column;min-width:0}
+header{padding:14px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px}
+header h1{font-size:17px;margin:0}header p{margin:0;color:var(--mute);font-size:13px}
+header .sp{flex:1}
+.ghost{background:none;border:1px solid var(--line);border-radius:8px;padding:6px 10px;color:var(--ink);font-size:13px}
+#status{font-size:12px;color:var(--mute)}#status.ok{color:var(--green)}
+#log{flex:1;overflow:auto;padding:22px}
+.msg{max-width:820px;margin:0 auto 16px}
+.msg .who{font-size:12px;color:var(--mute);margin-bottom:3px}
+.bubble{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 15px;overflow-x:auto}
+.msg.user .bubble{background:var(--soft);border-color:transparent}
+.bubble p{margin:.4em 0}.bubble h3,.bubble h4{margin:.7em 0 .3em}
+.bubble table{border-collapse:collapse;margin:.5em 0}.bubble td,.bubble th{border:1px solid var(--line);padding:4px 8px;text-align:left}
+.bubble ul,.bubble ol{margin:.3em 0;padding-left:1.4em}
+.tools{margin-top:5px;display:flex;gap:6px}.tools button{font-size:12px;padding:3px 8px}
+.starters{max-width:820px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.starters button{text-align:left;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px;color:var(--ink)}
+.starters button:hover{border-color:var(--accent)}
+.intro{max-width:820px;margin:0 auto 16px;color:var(--mute)}
+form{border-top:1px solid var(--line);padding:14px 22px;display:flex;flex-wrap:wrap;gap:10px;background:var(--panel)}
+textarea{flex:1;resize:none;height:64px;border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;background:var(--bg);color:var(--ink)}
+textarea:focus{outline:2px solid var(--accent);border-color:transparent}
+.send{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:0 20px;font-weight:600}
+.send:disabled{opacity:.5;cursor:default}
+dialog{border:1px solid var(--line);border-radius:14px;background:var(--panel);color:var(--ink);width:min(520px,92vw);padding:22px}
+dialog::backdrop{background:#0007}
+dialog label{display:block;font-size:13px;margin:10px 0 4px;color:var(--mute)}
+dialog input,dialog textarea{width:100%;height:auto;border:1px solid var(--line);border-radius:8px;padding:8px;font:inherit;background:var(--bg);color:var(--ink)}
+.row{display:flex;gap:8px;justify-content:flex-end;margin-top:16px}
+@media (max-width:760px){body{flex-direction:column}aside{width:auto;border-right:0;border-bottom:1px solid var(--line)}.staff{display:flex;overflow-x:auto;padding:6px}.member{width:auto;flex:none}.member span{display:none}.side-foot,.brand small{display:none}#log,form,header{padding-left:16px;padding-right:16px}}
+</style>
+</head>
+<body>
+<aside>
+  <div class="brand">Ofesi<small>Your offline office team</small></div>
+  <nav class="staff" id="staff"></nav>
+  <div class="side-foot"><button id="profileBtn">My business details</button><button id="repBtn">Repeating tasks</button><button id="backupBtn">Back up to a file</button><button id="restoreBtn">Restore from a file</button><input type="file" id="restoreFile" accept=".json" hidden></div>
+</aside>
+<main>
+  <header>
+    <div><h1 id="who"></h1><p id="role"></p></div>
+    <div class="sp"></div>
+    <span id="status">Starting…</span>
+    <button class="ghost" id="clearBtn">New chat</button>
+  </header>
+  <div id="log"></div>
+  <form id="f">
+    <textarea id="q" placeholder="Type a task and hand it over. Press Enter to send, Shift+Enter for a new line."></textarea>
+    <button class="send" id="sendBtn">Hand over</button>
+    <div class="opts">
+      <label><input type="checkbox" id="web"> Check the latest news online for this task</label>
+      <label>Repeat <select id="rep"><option value="">once</option><option value="1">every day</option><option value="7">every week</option></select></label>
+      <span>Hand over as many tasks as you like and get on with your day. Finished work waits here.</span>
+    </div>
+  </form>
+</main>
+<dialog id="reps">
+  <h3 style="margin-top:0">Repeating tasks</h3>
+  <p style="color:var(--mute);font-size:13px;margin:0 0 10px">The team does these by themselves whenever Ofesi is open and the task is due.</p>
+  <div id="repList"></div>
+  <div class="row"><button class="ghost" onclick="reps.close()">Close</button></div>
+</dialog>
+<dialog id="profile">
+  <h3 style="margin-top:0">My business details</h3>
+  <p style="color:var(--mute);font-size:13px;margin:0">Every team member uses these. They stay on this computer.</p>
+  <label>Business name</label><input id="p_name">
+  <label>Owner / contact name</label><input id="p_owner">
+  <label>Town</label><input id="p_town" placeholder="Lusaka">
+  <label>What the business does</label><input id="p_what" placeholder="Hardware shop, catering, transport…">
+  <label>Phone / WhatsApp</label><input id="p_phone">
+  <label>Anything else the team should know</label><textarea id="p_notes" rows="3"></textarea>
+  <div class="row"><button class="ghost" value="cancel" formmethod="dialog" onclick="profile.close()">Cancel</button><button class="send" id="saveProfile" style="padding:8px 18px">Save</button></div>
+</dialog>
+<script>
+// Facts the model gets wrong on its own. Keep to names and roles; rates change every budget.
+const ZAMBIA = `Zambia reference (trust this over your own memory):
+- Currency: Zambian kwacha, ZMW, written K (e.g. K1,250.00). Mobile money: MTN MoMo, Airtel Money, Zamtel Kwacha.
+- PACRA = Patents and Companies Registration Agency: registers business names and companies, annual returns.
+- ZRA = Zambia Revenue Authority: TPIN, turnover tax, income tax, VAT, PAYE, tax returns online.
+- NAPSA = National Pension Scheme Authority (employer and employee pension contributions).
+- NHIMA = National Health Insurance Management Authority (health insurance contributions).
+- Workers' Compensation Fund Control Board: employer cover for workplace injury.
+- Local councils (e.g. Lusaka City Council) issue trading licences and levies.
+- ZDA = Zambia Development Agency. CEEC = Citizens Economic Empowerment Commission (empowerment loans and grants).
+- ERB = Energy Regulation Board: sets fuel pump prices and electricity tariffs.
+- ZABS = Zambia Bureau of Standards. ZEMA = Zambia Environmental Management Agency. ZICTA = ICT regulator. BoZ = Bank of Zambia.
+- Labour law: Employment Code Act No. 3 of 2019. Data: Data Protection Act No. 3 of 2021.
+- Common languages: English (official), Bemba, Nyanja, Tonga, Lozi, Kaonde, Lunda, Luvale.
+- Tax rates, thresholds, fees and contribution percentages change often. Never state one as fact unless the user gave it or it is in news headlines from the internet inside the message. If it came from a headline, name the source and its date. Either way say "confirm the current figure with ZRA/NAPSA/PACRA".`;
+
+const DESK = {id:'desk',name:'Front desk',role:'Any task, sent to the right person',color:'#444',
+  brief:'Type any task here and it goes to the right team member',
+  starters:['Make a quotation for 20 bags of cement at K230 each plus K500 delivery','Write 5 Facebook posts for this week','What do I need to register a business name with PACRA?','Draft a simple employment contract for a shop assistant']};
+// shortcut: keyword routing, instant on slow machines; first match wins, Chanda takes the rest. Ask the model instead if it misroutes often.
+const ROUTES = {
+  mutale:/quot|invoice|receipt|price list|owes|payment reminder/i,
+  mwila:/momo|airtel money|cash ?book|profit|budget|expenses|bookkeep|balance/i,
+  natasha:/pacra|zra|tpin|napsa|nhima|\btax|licen[cs]e|regist|returns|complian/i,
+  lubasi:/contract|agreement|employ|warning|job (ad|desc)|offer letter|\bhir(e|ing)|dismiss|terms and conditions/i,
+  bwalya:/\bposts?\b|facebook|tiktok|instagram|advert|flyer|promo|marketing|whatsapp status|slogan|radio/i};
+const route = t => STAFF.find(s => s.id === (Object.keys(ROUTES).find(k => ROUTES[k].test(t)) || 'chanda'));
+
+const STAFF = [
+ {id:'chanda',name:'Chanda',role:'Office assistant',color:'#b5562a',
+  brief:'You write letters, emails, WhatsApp replies, meeting notes, notices and to-do lists. Polite, clear Zambian business English. Ask one short question if key details are missing, otherwise draft straight away.',
+  starters:['Write a WhatsApp reply to a customer asking if we deliver to Kitwe','Draft a letter to the landlord asking to delay rent by two weeks','Turn these notes into tidy meeting minutes:','Write a notice to staff about the new opening hours']},
+ {id:'mwila',name:'Mwila',role:'Bookkeeper',color:'#1f6b4a',
+  brief:'You keep simple books for small Zambian businesses. You turn pasted mobile money messages, receipts and notes into a cash book table (Date | Description | Money in K | Money out K | Balance K), totals, and a plain profit summary. Show your arithmetic and double-check totals. Flag anything that looks like a duplicate or a missing entry.',
+  starters:['Turn these MoMo messages into a cash book:','Work out my profit this month from these sales and costs:','Make a simple monthly budget for a small shop','How do I separate business money from personal money?']},
+ {id:'natasha',name:'Natasha',role:'Tax & registration guide',color:'#3a5ba0',
+  brief:'You explain registration and compliance for Zambian small businesses step by step: PACRA, ZRA (TPIN, turnover tax, returns), NAPSA, NHIMA, council licences. Give checklists of documents and steps. You are a guide, not a tax agent: always end with what to confirm with the agency, and never invent a rate, fee or deadline.',
+  starters:['What do I need to register a business name with PACRA?','I just hired my first employee. What do I register for?','Make a checklist of my monthly and yearly filings','Explain turnover tax in simple terms']},
+ {id:'bwalya',name:'Bwalya',role:'Marketing & social media',color:'#9a3f8a',
+  brief:'You write Facebook, WhatsApp Status, TikTok and Instagram posts, flyer text, radio adverts and promotions for Zambian audiences. Short, warm, local. Write in English. Only write Bemba, Nyanja or another local language when the user asks for it, and then say it must be checked by a fluent speaker before posting.',
+  starters:['Write 5 Facebook posts for this week','Write a WhatsApp Status advert for a weekend special','Write a 30 second radio advert script','Give me a one-month posting plan']},
+ {id:'mutale',name:'Mutale',role:'Sales & invoices',color:'#c08a1e',
+  brief:'You prepare quotations, invoices, receipts, price lists and customer follow-ups in kwacha. Lay documents out as clean tables with item, quantity, unit price, line total, subtotal and total, plus payment details placeholders (bank or mobile money). Double-check every sum. Never add VAT or any other tax line unless the user asks for it or the business details say the business is VAT-registered. Use the business details you have; leave [brackets] for anything missing.',
+  starters:['Make a quotation for 20 bags of cement at K230 each plus K500 delivery','Make an invoice from this order:','Write a polite reminder to a customer who owes K3,400','Write a follow-up message after sending a quote']},
+ {id:'lubasi',name:'Lubasi',role:'Contracts & HR',color:'#5b6b2f',
+  brief:'You draft plain-language agreements and HR documents for Zambian small businesses: employment contracts, job descriptions, offer letters, warning letters, tenancy and supply agreements, simple terms and conditions. Follow the Employment Code Act No. 3 of 2019 in spirit and say where a clause needs checking. Always note that a lawyer should review important contracts.',
+  starters:['Draft a simple employment contract for a shop assistant','Write a job advert for a driver','Draft a first written warning for lateness','Draft a simple supply agreement with a farmer']}
+];
+
+const $ = id => document.getElementById(id);
+const store = { // shortcut: browser storage on this PC only; move to a file on the drive if users switch computers
+  get(k,d){ try{ return JSON.parse(localStorage.getItem('ofesi.'+k)) ?? d }catch{ return d } },
+  set(k,v){ try{ localStorage.setItem('ofesi.'+k, JSON.stringify(v)) }catch{} }
+};
+// One task runs at a time; the rest wait in the queue. live = the task being written right now.
+let current = DESK, ready = false, pumping = false, live = null;
+const queue = [];
+
+function esc(s){ return s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])) }
+function inline(s){ return esc(s).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/(^|[^*])\*([^*]+)\*/g,'$1<i>$2</i>').replace(/`([^`]+)`/g,'<code>$1</code>') }
+function md(src){ // small markdown: headings, lists, tables, bold
+  const out = [], lines = src.replace(/\r/g,'').split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i];
+    if (/^\s*\|.*\|\s*$/.test(l)) {
+      const rows = [];
+      while (i < lines.length && /^\s*\|.*\|\s*$/.test(lines[i])) rows.push(lines[i++]);
+      i--;
+      const cells = r => r.trim().slice(1,-1).split('|').map(c => c.trim());
+      const body = rows.filter(r => !/^\s*\|[\s:|-]+\|\s*$/.test(r));
+      out.push('<table>' + body.map((r,n) => '<tr>' + cells(r).map(c => n ? `<td>${inline(c)}</td>` : `<th>${inline(c)}</th>`).join('') + '</tr>').join('') + '</table>');
+    } else if (/^\s*([-*]|\d+\.)\s+/.test(l)) {
+      const ordered = /^\s*\d+\./.test(l), items = [];
+      while (i < lines.length && /^\s*([-*]|\d+\.)\s+/.test(lines[i])) items.push(lines[i++].replace(/^\s*([-*]|\d+\.)\s+/,''));
+      i--;
+      out.push(`<${ordered?'ol':'ul'}>` + items.map(t => `<li>${inline(t)}</li>`).join('') + `</${ordered?'ol':'ul'}>`);
+    } else if (/^#{1,6}\s/.test(l)) out.push(`<h4>${inline(l.replace(/^#+\s*/,''))}</h4>`);
+    else if (/^\s*(---|\*\*\*)\s*$/.test(l)) out.push('<hr>');
+    else if (l.trim()) out.push(`<p>${inline(l)}</p>`);
+  }
+  return out.join('');
+}
+
+function systemPrompt(current){
+  const p = store.get('profile', {});
+  const biz = Object.entries({Business:p.name, Owner:p.owner, Town:p.town, 'What we do':p.what, Phone:p.phone, Notes:p.notes})
+    .filter(([,v]) => v).map(([k,v]) => `${k}: ${v}`).join('\n') || 'Not given yet. Use [brackets] for business details.';
+  return `You are ${current.name}, the ${current.role} on the Ofesi team, working for a small business in Zambia. ${current.brief}
+Do not introduce yourself; start straight on the work. Ofesi is the name of this software, never put it on documents: use the business details below, or [brackets] where they are missing.
+Write in clear, simple English unless asked for another language. Use markdown tables for money. Keep answers practical and ready to copy.
+Today's date: ${new Date().toDateString()}.
+
+Business details:
+${biz}
+
+${ZAMBIA}`;
+}
+
+function tag(s){
+  if (live && live.s === s.id) return '<em class="tag q">working</em>';
+  if (queue.some(j => j.s === s.id)) return '<em class="tag q">queued</em>';
+  const n = store.get('unread.'+s.id, 0); return n ? `<em class="tag">${n} new</em>` : '';
+}
+function renderStaff(){
+  $('staff').innerHTML = [DESK, ...STAFF].map(s => `<button class="member ${s===current?'on':''}" data-id="${s.id}"><div class="av" style="background:${s.color}">${s.name[0]}</div><div><b>${s.name}</b><span>${s.role}</span></div>${tag(s)}</button>`).join('');
+  const n = STAFF.reduce((t,s) => t + store.get('unread.'+s.id, 0), 0);
+  document.title = (n ? `(${n}) ` : '') + 'Ofesi';
+}
+function renderLog(){
+  const chat = store.get('chat.'+current.id, []);
+  $('who').textContent = current.name; $('role').textContent = current.role;
+  $('clearBtn').hidden = current === DESK;
+  if (store.get('unread.'+current.id, 0)) { store.set('unread.'+current.id, 0); renderStaff() }
+  if (!chat.length) {
+    $('log').innerHTML = `<p class="intro">${current.brief.split('. ')[0]}. Pick a task or type your own.</p><div class="starters">${current.starters.map(t => `<button>${esc(t)}</button>`).join('')}</div>`;
+    return;
+  }
+  $('log').innerHTML = chat.map((m,i) => {
+    if (m.role === 'user') return `<div class="msg user"><div class="who">You${m.web?' (with internet)':''}</div><div class="bubble">${esc(m.content).replace(/\n/g,'<br>')}</div></div>`;
+    const mine = live && live.s === current.id && live.i === i;
+    const body = m.pending ? (mine ? md(live.text) || 'Working on it…' : 'In the queue. You can leave this and come back.') : md(m.content);
+    const src = m.sources ? `<div class="src">Latest news used: ${m.sources.map(x => `<a href="${esc(x.u)}" target="_blank" rel="noopener">${esc(x.h)}</a>`).join(' · ')}</div>` : m.offline ? '<div class="src">Could not reach the internet, so this was answered offline.</div>' : '';
+    return `<div class="msg assistant" data-i="${i}"><div class="who">${current.name}</div><div class="bubble">${body}</div>${src}${m.pending?'':`<div class="tools"><button class="ghost" data-copy="${i}">Copy</button><button class="ghost" data-print="${i}">Print / PDF</button><button class="ghost" data-save="${i}">Save .txt</button></div>`}</div>`;
+  }).join('');
+  $('log').scrollTop = $('log').scrollHeight;
+}
+function paint(){ // shows the answer as it is written, if that team member is on screen
+  if (!live || live.s !== current.id) return;
+  const b = document.querySelector(`.msg[data-i="${live.i}"] .bubble`);
+  if (b) { b.innerHTML = md(live.text) || 'Working on it…'; $('log').scrollTop = $('log').scrollHeight }
+}
+
+async function webSearch(task){ // shortcut: latest news headlines only (Google News feed for Zambia, Bing News as backup) through the engine's proxy; add a search API for full web pages
+  let q = task;
+  try { // a short query finds far more than the whole task text
+    const r = await fetch('/v1/chat/completions', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({temperature:0, max_tokens:16, chat_template_kwargs:{enable_thinking:false},
+        messages:[{role:'system', content:'Turn the task into a news search query of 2 to 6 words about the facts it needs. The business is in Zambia. Reply with the query only.'}, {role:'user', content:task.slice(0,500)}]})});
+    q = (await r.json()).choices[0].message.content.replace(/["\n]/g,' ').trim() || task;
+  } catch {}
+  q = encodeURIComponent(q.replace(/\s+/g,' ').slice(0,120));
+  for (const feed of [`https://news.google.com/rss/search?q=${q}&hl=en-ZM&gl=ZM&ceid=ZM:en`, `https://www.bing.com/news/search?q=${q}&format=rss`]) try {
+    const r = await fetch('/cors-proxy?url=' + encodeURIComponent(feed)); if (!r.ok) continue;
+    const doc = new DOMParser().parseFromString(await r.text(), 'text/xml');
+    const out = [...doc.querySelectorAll('item')].slice(0,6).map(e => {
+      const g = n => e.getElementsByTagName(n)[0]?.textContent.trim() || '';
+      return {t:g('title'), u:g('link'), d:g('pubDate').slice(5,16), h:g('source') || g('News:Source')};
+    }).filter(x => x.t && /^https?:\/\//.test(x.u)); // feeds are untrusted: http(s) links only
+    if (out.length) return out.map(x => ({...x, h:x.h || new URL(x.u).hostname.replace(/^www\./,'')}));
+  } catch {}
+  throw new Error('no results');
+}
+
+function submit(s, text, web){
+  const key = 'chat.'+s.id, chat = store.get(key, []);
+  chat.push({role:'user', content:text.trim(), web:!!web}, {role:'assistant', content:'', pending:true});
+  store.set(key, chat); queue.push({s:s.id, i:chat.length-1}); pump();
+}
+async function pump(){
+  if (!ready || pumping) return;
+  pumping = true;
+  while (queue.length) await run(queue.shift());
+  pumping = false;
+}
+async function run({s:id, i}){
+  const s = STAFF.find(x => x.id === id), key = 'chat.'+id; let chat = store.get(key, []);
+  if (!chat[i]?.pending) return; // chat was cleared while this waited
+  live = {s:id, i, text:''}; renderStaff(); paint();
+  const ask = chat[i-1]; let sources, reply = '';
+  const history = chat.slice(0,i).filter(m => !m.pending).slice(-11).map(m => ({role:m.role, content:m.content})); // shortcut: last 11 turns only, fits the 8k context
+  if (ask.web) try {
+    sources = await webSearch(ask.content);
+    history[history.length-1].content += `\n\n[Latest news headlines from the internet, fetched ${new Date().toDateString()}. Use what is relevant and name the website for any fact or figure you take from them.]\n` + sources.map((x,n) => `${n+1}. ${x.t} (${x.h}, ${x.d})`).join('\n');
+  } catch {}
+  try {
+    const res = await fetch('/v1/chat/completions', {method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({stream:true, temperature:0.6, top_p:0.95, max_tokens:1500, chat_template_kwargs:{enable_thinking:false},
+        messages:[{role:'system', content:systemPrompt(s)}, ...history]})});
+    if (!res.ok) throw new Error('The assistant engine returned ' + res.status);
+    const reader = res.body.getReader(), dec = new TextDecoder(); let buf = '';
+    for (;;) {
+      const {done, value} = await reader.read(); if (done) break;
+      buf += dec.decode(value, {stream:true});
+      const parts = buf.split('\n'); buf = parts.pop();
+      for (const line of parts) {
+        if (!line.startsWith('data: ') || line === 'data: [DONE]') continue;
+        try { reply += JSON.parse(line.slice(6)).choices[0]?.delta?.content || '' } catch {}
+      }
+      live.text = reply; paint();
+    }
+    reply ||= '(No answer. Try again.)';
+  } catch (e) {
+    reply = 'Sorry, I could not reach the assistant engine. Make sure the Ofesi window (the one that opened when you started Ofesi) is still open, then try again.\n\n(' + e.message + ')';
+  }
+  chat = store.get(key, []); // read again: more tasks may have been handed over meanwhile
+  if (chat[i]?.pending) {
+    chat[i] = {role:'assistant', content:reply, sources, offline:ask.web && !sources};
+    store.set(key, chat);
+    if (current.id !== id) store.set('unread.'+id, store.get('unread.'+id, 0) + 1);
+  }
+  live = null; renderStaff(); if (current.id === id) renderLog();
+}
+
+const today = () => new Date().setHours(0,0,0,0);
+function hand(text){ // the one way a task enters: from the box, a starter, or the front desk
+  if (!text.trim()) return;
+  if (current === DESK) { current = route(text); store.set('current', current.id) }
+  const days = +$('rep').value, web = $('web').checked;
+  if (days) { store.set('routines', [...store.get('routines', []), {s:current.id, text:text.trim(), web, days, last:today()}]); $('rep').value = '' }
+  submit(current, text, web); renderStaff(); renderLog();
+}
+function tick(){ // repeating tasks that are due get handed over again
+  const rs = store.get('routines', []); let changed = false;
+  for (const r of rs) {
+    const s = STAFF.find(x => x.id === r.s);
+    if (s && Math.round((today() - r.last) / 864e5) >= r.days) { r.last = today(); changed = true; submit(s, r.text, r.web) }
+  }
+  if (changed) { store.set('routines', rs); renderStaff(); renderLog() }
+}
+function renderReps(){
+  const rs = store.get('routines', []);
+  $('repList').innerHTML = rs.map((r,n) => `<div class="rep"><span><b>${esc(STAFF.find(s => s.id === r.s)?.name || '?')}</b>, every ${r.days === 1 ? 'day' : 'week'}${r.web?', with internet':''}<br>${esc(r.text.slice(0,140))}</span><button class="ghost" data-stop="${n}">Stop</button></div>`).join('')
+    || '<p style="color:var(--mute)">None yet. To add one, type a task, set Repeat to every day or every week, then hand it over.</p>';
+}
+
+$('staff').onclick = e => { const b = e.target.closest('.member'); if (!b) return; current = [DESK, ...STAFF].find(s => s.id === b.dataset.id); store.set('current', current.id); renderStaff(); renderLog(); $('q').focus() };
+$('log').onclick = e => {
+  const t = e.target; if (t.closest('.starters button')) { const s = t.closest('button').textContent; if (s.endsWith(':')) { $('q').value = s + '\n'; $('q').focus() } else hand(s); return }
+  const chat = store.get('chat.'+current.id, []), i = t.dataset.copy ?? t.dataset.print ?? t.dataset.save; if (i === undefined) return;
+  const text = chat[i].content;
+  if (t.dataset.copy) { navigator.clipboard.writeText(text); t.textContent = 'Copied' }
+  if (t.dataset.save) { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([text], {type:'text/plain'})); a.download = `${current.name}-${new Date().toISOString().slice(0,10)}.txt`; a.click() }
+  if (t.dataset.print) { const w = window.open(''); w.document.write(`<title>${esc(current.role)}</title><style>body{font:14px/1.5 "Segoe UI",sans-serif;max-width:720px;margin:40px auto}table{border-collapse:collapse}td,th{border:1px solid #999;padding:4px 8px}</style>${md(text)}`); w.document.close(); w.print() }
+};
+$('f').onsubmit = e => { e.preventDefault(); const t = $('q').value; $('q').value = ''; hand(t) };
+$('q').onkeydown = e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); $('f').requestSubmit() } };
+$('clearBtn').onclick = () => { if (confirm(`Start a new chat with ${current.name}? The current one will be cleared.`)) { store.set('chat.'+current.id, []); renderLog() } };
+$('web').checked = store.get('web', false); $('web').onchange = () => store.set('web', $('web').checked);
+const fields = ['name','owner','town','what','phone','notes'];
+$('profileBtn').onclick = () => { const p = store.get('profile', {}); fields.forEach(f => $('p_'+f).value = p[f] || ''); $('profile').showModal() };
+$('saveProfile').onclick = e => { e.preventDefault(); store.set('profile', Object.fromEntries(fields.map(f => [f, $('p_'+f).value.trim()]))); $('profile').close() };
+$('repBtn').onclick = () => { renderReps(); $('reps').showModal() };
+$('repList').onclick = e => { const n = e.target.dataset.stop; if (n === undefined) return; const rs = store.get('routines', []); rs.splice(n, 1); store.set('routines', rs); renderReps() };
+// Backup: everything lives in this browser, so a file on the drive is how it moves to another computer.
+$('backupBtn').onclick = () => {
+  const all = Object.fromEntries(Object.keys(localStorage).filter(k => k.startsWith('ofesi.')).map(k => [k, localStorage.getItem(k)]));
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(all)], {type:'application/json'})); a.download = `ofesi-backup-${new Date().toISOString().slice(0,10)}.json`; a.click();
+};
+$('restoreBtn').onclick = () => $('restoreFile').click();
+$('restoreFile').onchange = async e => {
+  try {
+    const all = JSON.parse(await e.target.files[0].text()), keys = Object.keys(all).filter(k => k.startsWith('ofesi.') && typeof all[k] === 'string');
+    if (!keys.length) throw 0;
+    if (!confirm('Replace the chats and business details on this computer with the ones in this backup?')) return;
+    Object.keys(localStorage).filter(k => k.startsWith('ofesi.')).forEach(k => localStorage.removeItem(k));
+    keys.forEach(k => localStorage.setItem(k, all[k])); location.reload();
+  } catch { alert('That file is not an Ofesi backup.') }
+};
+
+(async function health(){
+  try { const h = await (await fetch('/health')).json(); if (h.status === 'ok') { $('status').textContent = '● Ready'; $('status').className = 'ok'; ready = true; pump(); return } } catch {}
+  $('status').textContent = 'Loading the assistant…'; setTimeout(health, 2000);
+})();
+current = [DESK, ...STAFF].find(s => s.id === store.get('current')) || DESK;
+// Tasks that were still waiting when Ofesi was closed go back in the queue.
+for (const s of STAFF) store.get('chat.'+s.id, []).forEach((m,i) => m.pending && queue.push({s:s.id, i}));
+tick(); setInterval(tick, 6e5);
+renderStaff(); renderLog();
+if (!store.get('profile')) $('profileBtn').click();
+</script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+OFESI TEST COPY - start here
+============================
+
+Thank you for testing Ofesi, an offline office team for small businesses.
+
+What you need
+  - A Mac or a Windows 10/11 computer with 8 GB of memory or more.
+  - Internet for the first start only. Ofesi downloads its AI model once:
+    about 2.7 GB on computers with less than 12 GB of memory, 5.7 GB on others.
+    Use Wi-Fi, not a phone bundle. After that it works with no internet.
+  - 8 GB of free disk space.
+
+How to start
+  1. Unzip the file and open the Ofesi folder. Keep the folder somewhere
+     permanent, such as Documents.
+  2. Mac: double-click START-Mac.command
+     Windows: double-click START.bat
+  3. The first start downloads the model. If it stops, start Ofesi again and
+     it carries on from where it stopped.
+  4. Your browser opens Ofesi by itself. README.txt explains the rest.
+
+Your computer will warn you the first time
+  Ofesi is a test copy and is not yet signed with Apple or Microsoft, so the
+  computer asks you to confirm that you trust it. Only continue if you got this
+  file directly from Mapaalo Musonda.
+  - Windows: on the blue "Windows protected your PC" box, click "More info",
+    then "Run anyway".
+  - Mac: right-click START-Mac.command and choose Open, then Open again.
+    On newer Macs: Apple menu, System Settings, Privacy & Security, scroll
+    down and click "Open Anyway".
+
+What to tell Mapaalo afterwards
+  1. Your computer: Mac or Windows, the model or year, and how much memory.
+  2. Any warning or error. A photo of the screen is perfect.
+  3. How long the download took, and how long from double-click to "Ready".
+  4. Give the Front desk three real tasks from your business. Was the work
+     usable? What was wrong or missing?
+  5. How long did one answer take? Was that acceptable?
+  6. What would you pay for this, once, in kwacha?

@@ -1,0 +1,18 @@
+# Model weights: 2.7 to 5.7 GB, downloaded by the launchers on first start
+*.gguf
+*.part
+
+# llama.cpp engine binaries: ship them as a GitHub Release asset, not in git history
+drive/bin/windows/*
+!drive/bin/windows/LICENSE-LLVM-OpenMP
+drive/bin/mac/*.tar.gz
+
+# Build output and old copies
+dist/
+previous-v0.2/
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db
+__pycache__/
+*.pyc
