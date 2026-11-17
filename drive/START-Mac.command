@@ -14,6 +14,10 @@ if [ ! -x "$ENGINE/llama-server" ]; then
   mkdir -p "$ENGINE" && tar -xzf "bin/mac/llama-macos-$PKG.tar.gz" -C "$ENGINE" --strip-components 1 || {
     rm -rf "$ENGINE"; echo "Could not prepare Ofesi on this Mac."; read -r -p "Press Enter to close."; exit 1; }
 fi
+# A downloaded copy carries Apple's quarantine flag, and macOS offers to bin unsigned files that have it.
+# shortcut: ad-hoc signing only; a Developer ID signature plus notarisation removes the warnings for good.
+xattr -dr com.apple.quarantine . "$ENGINE" 2>/dev/null
+codesign --force -s - "$ENGINE"/llama-server "$ENGINE"/*.dylib >/dev/null 2>&1
 
 RAM=$(( $(sysctl -n hw.memsize) / 1073741824 ))
 # Low-memory Macs get the small model. A copy sent without models downloads the right one once.

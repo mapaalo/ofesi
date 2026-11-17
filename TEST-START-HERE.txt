@@ -25,9 +25,16 @@ Your computer will warn you the first time
   file directly from Mapaalo Musonda.
   - Windows: on the blue "Windows protected your PC" box, click "More info",
     then "Run anyway".
-  - Mac: right-click START-Mac.command and choose Open, then Open again.
-    On newer Macs: Apple menu, System Settings, Privacy & Security, scroll
-    down and click "Open Anyway".
+  - Mac: do this once, BEFORE double-clicking anything. If a box offers
+    "Move to Trash", click Done instead; Move to Trash deletes Ofesi.
+      1. Open Terminal (press Cmd+Space, type Terminal, press Return).
+      2. Type this, with a space at the end, but do not press Return yet:
+           xattr -dr com.apple.quarantine
+      3. Drag the Ofesi folder from Finder into the Terminal window.
+      4. Press Return. Nothing is printed; that is normal.
+    Now double-click START-Mac.command. If a box still appears, open
+    Apple menu, System Settings, Privacy & Security, scroll down and click
+    "Open Anyway".
 
 What to tell Mapaalo afterwards
   1. Your computer: Mac or Windows, the model or year, and how much memory.
