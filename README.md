@@ -35,4 +35,4 @@ End-user instructions are in `drive/README.txt`.
 
 llama.cpp is MIT (`drive/bin/LLAMA_CPP_LICENSE.txt`); Qwen3.5 weights are Apache 2.0
 (`drive/models/MODEL_LICENSE.txt`). Ofesi's own code: copyright Stormbox Creative Studio, all rights reserved.
-This is a private repository; no licence is granted to copy, modify or redistribute it.
+The source is public to read; no licence is granted to copy, modify or redistribute it.
